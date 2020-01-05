@@ -1,19 +1,19 @@
 $(document).ready(function() {
-  // Click Listener on Saved Button
+  //Saved Button
   $("#saved").on("click", function() {
     $.get("/api/articles/saved", function(responses) {
       renderSavedArticles(responses);
     });
   });
 
-  // Click Listener on Articles Button
+  //Articles Button
   $("#articles").on("click", function() {
     $.get("/api/articles/", function(responses) {
       renderArticles(responses);
     });
   });
 
-  // Set Click Listener on Scrape Button
+  // Scrape Button
   $("#scrape").on("click", function() {
     $.get("/api/scrape", function() {
       $.get("/api/articles", function(responses) {
@@ -35,8 +35,8 @@ function renderArticles(articles) {
     articleDiv.append(story);
     articleDiv.append(
       `<span>\
-            <button class='btn btn-primary btn-sm add_comment' data-id=${article._id}>Add Comment</button>\
-            <button class='btn btn-primary btn-sm see_comments' data-id=${article._id}>See Comments</button>\
+            <button class='btn btn-primary btn-sm add_note' data-id=${article._id}>Add Notexs</button>\
+            <button class='btn btn-primary btn-sm see_notes' data-id=${article._id}>See Notes</button>\
             <button class='btn btn-primary btn-sm save_article' data-id=${article._id}>Save Article</button>\
         </span>`
     );
@@ -44,7 +44,7 @@ function renderArticles(articles) {
   });
 
   // Modal Logic
-  $(".add_comment").on("click", function() {
+  $(".add_note").on("click", function() {
     // Toggle Modal On
     $("#myModal").modal("toggle");
 
@@ -71,27 +71,27 @@ function renderArticles(articles) {
   });
 
   // Modal Logic
-  $(".see_comments").on("click", function() {
+  $(".see_notes").on("click", function() {
     let theID = $(this).attr("data-id");
 
     $.get(`/api/articles/${theID}`, function(response) {
       const body = $("#modal-body");
       body.empty();
-      body.append("<h1>Comments</h1>");
+      body.append("<h1>Notes</h1>");
 
-      response[0].comments.map(function(comment) {
-        let commentContainer = $("<div>");
+      response[0].notes.map(function(notes) {
+        let noteContainer = $("<div>");
 
-        let commentTitle = $("<b>").text(comment.title);
-        let commentBody = $("<p>").text(comment.body);
+        let noteTitle = $("<b>").text(note.title);
+        let noteBody = $("<p>").text(note.body);
 
-        commentContainer.append(commentTitle);
-        commentContainer.append(commentBody);
+        noteContainer.append(noteTitle);
+        noteContainer.append(noteBody);
 
-        body.append(commentContainer);
+        body.append(noteContainer);
       });
 
-      $("#commentsModal").modal("toggle");
+      $("#notesModal").modal("toggle");
     });
   });
 
@@ -123,7 +123,7 @@ function renderSavedArticles(articles) {
     articleDiv.append(story);
     articleDiv.append(
       `<span>\
-            <button class='btn btn-primary btn-sm see_comments' data-id=${article._id}>See Comments</button>\
+            <button class='btn btn-primary btn-sm see_notes' data-id=${article._id}>See Notes</button>\
             <button class='btn btn-primary btn-sm save_article' data-id=${article._id}>Remove Saved Article</button>\
         </span>`
     );
@@ -131,27 +131,27 @@ function renderSavedArticles(articles) {
   });
 
   // Modal Logic
-  $(".see_comments").on("click", function() {
+  $(".see_notes").on("click", function() {
     let theID = $(this).attr("data-id");
 
     $.get(`/api/articles/${theID}`, function(response) {
       const body = $("#modal-body");
       body.empty();
-      body.append("<h1>Comments</h1>");
+      body.append("<h1>Notes</h1>");
 
-      response[0].comments.map(function(comment) {
-        let commentContainer = $("<div>");
+      response[0].notes.map(function(note) {
+        let noteContainer = $("<div>");
 
-        let commentTitle = $("<b>").text(comment.title);
-        let commentBody = $("<p>").text(comment.body);
+        let noteTitle = $("<b>").text(note.title);
+        let noteBody = $("<p>").text(note.body);
 
-        commentContainer.append(commentTitle);
-        commentContainer.append(commentBody);
+        noteContainer.append(noteTitle);
+        noteContainer.append(noteBody);
 
-        body.append(commentContainer);
+        body.append(noteContainer);
       });
 
-      $("#commentsModal").modal("toggle");
+      $("#notesModal").modal("toggle");
     });
   });
 
