@@ -18,7 +18,7 @@ var ArticleSchema = new Schema({
     ref: "Note"
   },
 
-  url: {
+  link: {
     type: String,
     required: true
   }

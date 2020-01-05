@@ -13,35 +13,36 @@ $(document).ready(function() {
     });
   });
 
-  // Scrape Button
+  //Scrape Button
   $("#scrape").on("click", function() {
-    $.get("/api/scrape", function() {
-      $.get("/api/articles", function(responses) {
-        renderArticles(responses);
-      });
+    $.ajax({
+      method: "GET",
+      url: "/scrape"
+    }).then(function(data) {
+      console.log(data);
     });
   });
-});
 
-function renderArticles(articles) {
-  $("#article-list").empty();
-  articles.forEach(article => {
-    let articleDiv = $("<div id=article_box>");
-    let header = $(`<h3>`).html(
-      `<a href=${article.link}>${article.headline}</a>`
-    );
-    let story = $("<p>").text(article.story);
-    articleDiv.append(header);
-    articleDiv.append(story);
-    articleDiv.append(
-      `<span>\
-            <button class='btn btn-primary btn-sm add_note' data-id=${article._id}>Add Notexs</button>\
+  function renderArticles(articles) {
+    $("#article-list").empty();
+    articles.forEach(article => {
+      let articleDiv = $("<div id=article_box>");
+      let header = $(`<h3>`).html(
+        `<a href=${article.link}>${article.headline}</a>`
+      );
+      let story = $("<p>").text(article.story);
+      articleDiv.append(header);
+      articleDiv.append(story);
+      articleDiv.append(
+        `<span>\
+            <button class='btn btn-primary btn-sm add_note' data-id=${article._id}>Add Notes</button>\
             <button class='btn btn-primary btn-sm see_notes' data-id=${article._id}>See Notes</button>\
             <button class='btn btn-primary btn-sm save_article' data-id=${article._id}>Save Article</button>\
         </span>`
-    );
-    $("#article-list").append(articleDiv);
-  });
+      );
+      $("#article-list").append(articleDiv);
+    });
+  }
 
   // Modal Logic
   $(".add_note").on("click", function() {
@@ -109,26 +110,26 @@ function renderArticles(articles) {
       data: data
     });
   });
-}
 
-function renderSavedArticles(articles) {
-  $("#article-list").empty();
-  articles.forEach(article => {
-    let articleDiv = $("<div id=article_box>");
-    let header = $(`<h3>`).html(
-      `<a href=${article.link}>${article.headline}</a>`
-    );
-    let story = $("<p>").text(article.story);
-    articleDiv.append(header);
-    articleDiv.append(story);
-    articleDiv.append(
-      `<span>\
+  function renderSavedArticles(articles) {
+    $("#article-list").empty();
+    articles.forEach(article => {
+      let articleDiv = $("<div id=article_box>");
+      let header = $(`<h3>`).html(
+        `<a href=${article.link}>${article.headline}</a>`
+      );
+      let story = $("<p>").text(article.story);
+      articleDiv.append(header);
+      articleDiv.append(story);
+      articleDiv.append(
+        `<span>\
             <button class='btn btn-primary btn-sm see_notes' data-id=${article._id}>See Notes</button>\
             <button class='btn btn-primary btn-sm save_article' data-id=${article._id}>Remove Saved Article</button>\
         </span>`
-    );
-    $("#article-list").append(articleDiv);
-  });
+      );
+      $("#article-list").append(articleDiv);
+    });
+  }
 
   // Modal Logic
   $(".see_notes").on("click", function() {
@@ -169,4 +170,4 @@ function renderSavedArticles(articles) {
       data: data
     });
   });
-}
+});

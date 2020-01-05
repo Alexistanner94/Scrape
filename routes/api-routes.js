@@ -4,12 +4,13 @@ var axios = require("axios");
 
 module.exports = function(app) {
   // Scrape news and insert into MongoDB
-  app.get("/api/scrape", function(req, res) {
+
+  app.get("/scrape", function(req, res) {
     axios.get("https://www.ajc.com/life/buzz-blog/").then(function(response) {
       var $ = cheerio.load(response.data);
-      $(".story_with_image_featured").each(function(i, element) {
+      $("h3.tease_heading").each(function(i, element) {
         let headline = $(element)
-          .find("h1.tease_heading")
+          .children("a")
           .text();
 
         let story = $(element)
@@ -17,7 +18,7 @@ module.exports = function(app) {
           .text();
 
         let link = $(element)
-          .find("a.tease_heading_link")
+          .children("a")
           .attr("href");
 
         result = {
@@ -35,7 +36,7 @@ module.exports = function(app) {
           });
       });
 
-      res.end();
+      res.send("Complete");
     });
   });
 
